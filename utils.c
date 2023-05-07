@@ -100,34 +100,3 @@ long	ft_get_time(void)
 	time = (real_time.tv_sec * 1000) + (real_time.tv_usec / 1000);
 	return (time);
 }
-
-void	ft_unlock_fork(t_philo *ph)
-{
-	pthread_mutex_unlock(ph->right_fork);
-	pthread_mutex_unlock(ph->left_fork);
-}
-
-int	ft_is_die(long time, t_philo *ph)
-{
-	long	x;
-
-	x = ft_get_time();
-	while (time > (ft_get_time() - x))
-	{
-		pthread_mutex_lock(ph->sah->tstart);
-		if ((ft_get_time() - ph->sah->start - ph->last_eat) >= ph->sah->time_of_die
-			&& ph->sah->paus == 0)
-		{
-			ph->sah->index = ph->id;
-			ph->sah->time = ft_get_time() - ph->sah->start;
-			ph->sah->paus = 1;
-			pthread_mutex_unlock(ph->sah->tstart);
-			return (ft_unlock_fork(ph), 1);
-		}
-		pthread_mutex_unlock(ph->sah->tstart);
-		if (ph->sah->paus == 1)
-			return (ft_unlock_fork(ph), 1);
-		usleep(100);
-	}
-	return (0);
-}

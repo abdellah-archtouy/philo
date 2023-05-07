@@ -23,26 +23,28 @@ int	check_die(long time, long l, t_philo	*ph, int i)
 	return (0);
 }
 
-int	ft_usleep(long time, t_philo *ph)
+void	*ft_handel2(t_philo *ph)
 {
-	long start = ft_get_time();
-
-	(void)ph;
-	while (ft_get_time() - start < time)
-	{	
-		// if (check_die(time, ft_get_time() - ph->sah->start, ph, 1) == 1)
-		// 	return (1);
-		usleep(100);
+	while (ph->n_of_meal--)
+	{
+		pthread_mutex_lock(ph->right_fork);
+		printf("%ld %d has taken a fork\n",
+			ft_get_time() - ph->sah->start, ph->id);
+		pthread_mutex_lock(ph->left_fork);
+		printf("%ld %d has taken a fork\n",
+			ft_get_time() - ph->sah->start, ph->id);
+		printf("%ld %d is eating\n", ft_get_time() - ph->sah->start, ph->id);
+		if (ft_is_die(ph->sah->time_of_eat, ph) == 1)
+			break ;
+		ph->last_eat = ft_get_time() - ph->sah->start;
+		pthread_mutex_unlock(ph->right_fork);
+		pthread_mutex_unlock(ph->left_fork);
+		printf("%ld %d is sleeping\n", ft_get_time() - ph->sah->start, ph->id);
+		if (ft_is_die(ph->sah->time_of_sleap, ph) == 1)
+			break ;
+		printf("%ld %d is thinking\n", ft_get_time() - ph->sah->start, ph->id);
 	}
-	return (0);
-}
-
-void	handel(t_philo *ph)
-{
-	pthread_mutex_lock(ph->right_fork);
-	printf("%ld %d has taken a fork\n", ft_get_time() - ph->sah->start, ph->id);
-	ph->sah->index = ph->id;
-	ph->sah->paus = 1;
+	return (NULL);
 }
 
 void	*tasks(void *ptr)
@@ -56,30 +58,37 @@ void	*tasks(void *ptr)
 		return (handel(ph), NULL);
 	else
 	{
-		while (ph->n_of_meal--)
-		{
-			pthread_mutex_lock(ph->right_fork);
-			printf("%ld %d has taken a fork\n", ft_get_time() - ph->sah->start, ph->id);
-			pthread_mutex_lock(ph->left_fork);
-			printf("%ld %d has taken a fork\n", ft_get_time() - ph->sah->start, ph->id);
-			printf("%ld %d is eating\n", ft_get_time() - ph->sah->start, ph->id);
-			if(ft_is_die(ph->sah->time_of_eat, ph) == 1)
-				break ;
-			ph->last_eat = ft_get_time() - ph->sah->start;
-			pthread_mutex_unlock(ph->right_fork);
-			pthread_mutex_unlock(ph->left_fork);
-			printf("%ld %d is sleeping\n", ft_get_time() - ph->sah->start, ph->id);
-			if(ft_is_die(ph->sah->time_of_sleap, ph) == 1)
-				break ;
-			printf("%ld %d is thinking\n", ft_get_time() - ph->sah->start, ph->id);
-		}
+		ft_handel2(ph);
 	}
 	return (NULL);
 }
 
+void	ft_creat_thread(t_philo *ph, pthread_t *philo, t_sah *sah)
+{
+	int	i;
+
+	i = 0;
+	while (i < sah->nphilo)
+	{
+		if (pthread_create(&philo[i], NULL, &tasks, &ph[i]) != 0)
+			break ;
+		i++;
+	}
+	i = 0;
+	while (i < sah->nphilo)
+	{
+		if (pthread_join(philo[i], NULL) != 0)
+			break ;
+		i++;
+	}
+	if (ph->sah->paus == 1)
+		printf("%ld %d is died \n",
+			ft_get_time() - ph->sah->start, ph->sah->index);
+	return ;
+}
+
 int	main(int ac, char **av)
 {
-	int			i = 0;
 	t_philo		*ph;
 	t_sah		*sah;
 	pthread_t	*philo;
@@ -97,26 +106,11 @@ int	main(int ac, char **av)
 		philo = malloc(sizeof(pthread_t) * sah->nphilo);
 		if (philo == NULL)
 			return (0);
-		while (i < sah->nphilo)
-		{
-			if (pthread_create(&philo[i], NULL, &tasks, &ph[i]) != 0)
-				break ;
-			i++;
-		}
-		i = 0;
-		while (i < sah->nphilo)
-		{
-			if (pthread_join(philo[i], NULL) != 0)
-				break ;
-			i++;
-		}
-		i = 0;
-		if (ph->sah->paus == 1)
-			printf("%ld %d is died \n",
-				ft_get_time() - ph->sah->start, ph->sah->index);
+		ft_creat_thread(ph, philo, sah);
 		pthread_mutex_destroy(ph->left_fork);
 		pthread_mutex_destroy(ph->right_fork);
 		pthread_mutex_destroy(ph->sah->tstart);
+		ft_free2(ph, philo);
 	}
 	return (0);
 }

@@ -1,5 +1,5 @@
 NAME = philo
-SRC = philo.c utils.c
+SRC = philo.c utils.c utils1.c
 
 OBJ = $(SRC:%.c=%.o)
 
@@ -17,7 +17,7 @@ all : $(NAME)
 $(NAME) : $(OBJ)
 
 %.o : %.c $(INCLUDEB)
-	$(CC) $(CFALGS)  -c $< -o $@
+	$(CC) $(CFALGS) -c $< -o $@
 
 clean:
 	rm -rf $(OBJ) 

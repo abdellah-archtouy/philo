@@ -15,7 +15,7 @@ int	ft_is_die(long time, t_philo *ph)
 	while (time > (ft_get_time() - x))
 	{
 		pthread_mutex_lock(ph->sah->tstart);
-		if ((ft_get_time() - ph->sah->start - ph->last_eat) - 10
+		if ((ft_get_time() - ph->sah->start - ph->last_eat) - 1
 			>= ph->sah->time_of_die
 			&& ph->sah->paus == 0)
 		{

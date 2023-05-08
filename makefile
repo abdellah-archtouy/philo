@@ -20,7 +20,7 @@ $(NAME) : $(OBJ)
 	$(CC) $(CFALGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJ) 
+	rm -rf $(OBJ)
 
 fclean: clean
 	rm -rf $(NAME)

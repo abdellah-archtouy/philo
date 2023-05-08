@@ -95,6 +95,8 @@ int	main(int ac, char **av)
 
 	if (ac >= 5 && ac <= 6)
 	{
+		if (ft_check_max(ac, av) == 1)
+			return (1);
 		sah = malloc(sizeof(t_sah));
 		sah = get_arg(sah, av, ac);
 		if (!sah)
@@ -107,10 +109,9 @@ int	main(int ac, char **av)
 		if (philo == NULL)
 			return (0);
 		ft_creat_thread(ph, philo, sah);
-		pthread_mutex_destroy(ph->left_fork);
-		pthread_mutex_destroy(ph->right_fork);
-		pthread_mutex_destroy(ph->sah->tstart);
 		ft_free2(ph, philo);
 	}
+	else
+		printf("error\n");
 	return (0);
 }

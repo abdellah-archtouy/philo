@@ -15,7 +15,7 @@ int	ft_is_die(long time, t_philo *ph)
 	while (time > (ft_get_time() - x))
 	{
 		pthread_mutex_lock(ph->sah->tstart);
-		if ((ft_get_time() - ph->sah->start - ph->last_eat) - 1
+		if ((ft_get_time() - ph->sah->start - ph->last_eat)
 			>= ph->sah->time_of_die
 			&& ph->sah->paus == 0)
 		{
@@ -52,7 +52,14 @@ void	handel(t_philo *ph)
 	ph->sah->paus = 1;
 }
 
-void	ft_free(void)
+int	ft_check_max(int ac, char **av)
 {
-	system("leaks philo");
+	if (ft_atoi(av[1]) > 200 || ft_atoi(av[2]) > 2147483647
+		|| ft_atoi(av[3]) > 2147483647 || ft_atoi(av[4]) > 2147483647
+		|| (ac == 6 && ft_atoi(av[5]) > 2147483647))
+		return (printf("error\n"), 1);
+	else if (ft_atoi(av[1]) < 1 || ft_atoi(av[2]) < 60
+		|| ft_atoi(av[3]) < 60 || ft_atoi(av[4]) < 60)
+		return (printf("error\n"), 1);
+	return (0);
 }

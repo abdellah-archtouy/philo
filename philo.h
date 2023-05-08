@@ -35,7 +35,7 @@ typedef struct s_philo
 
 void	*tasks(void *ptr);
 long	ft_get_time(void);
-int		ft_atoi(const char *str);
+long	ft_atoi(const char *str);
 int		ft_is_die(long time, t_philo *ph);
 t_sah	*get_arg(t_sah *sah, char **av, int ac);
 void	ft_int_ph(t_sah *ph, char **av);
@@ -43,6 +43,7 @@ void	ft_free2(t_philo *ph, pthread_t *sah);
 void	*ft_handel2(t_philo *ph);
 t_philo	*init_data(t_philo *ph, t_sah	*sah, int ac, char **av);
 void	handel(t_philo *ph);
+int		ft_check_max(int ac, char **av);
 void	ft_free(void);
 
 #endif

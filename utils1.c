@@ -2,7 +2,6 @@
 
 void	ft_unlock_fork(t_philo *ph)
 {
-	pthread_mutex_unlock(ph->sah->tstart);
 	pthread_mutex_unlock(ph->right_fork);
 	pthread_mutex_unlock(ph->left_fork);
 }
@@ -28,7 +27,8 @@ int	ft_is_die(long time, t_philo *ph)
 		pthread_mutex_unlock(ph->sah->tstart);
 		pthread_mutex_lock(ph->sah->tstart);
 		if (ph->sah->paus == 1)
-			return (ft_unlock_fork(ph), 1);
+			return (pthread_mutex_unlock(ph->sah->tstart),
+				ft_unlock_fork(ph), 1);
 		pthread_mutex_unlock(ph->sah->tstart);
 		usleep(100);
 	}

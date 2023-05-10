@@ -95,16 +95,16 @@ int	main(int ac, char **av)
 
 	if (ac >= 5 && ac <= 6)
 	{
-		if (ft_check_max(ac, av) == 1)
-			return (1);
 		sah = malloc(sizeof(t_sah));
+		if (!sah)
+			return (printf("error\n"), 1);
 		sah = get_arg(sah, av, ac);
 		if (!sah)
 			return (printf("error\n"), 1);
 		ph = malloc(sizeof(t_philo) * sah->nphilo);
-		ph = init_data(ph, sah, ac, av);
 		if (!ph)
 			return (printf("error\n"), 1);
+		ph = init_data(ph, sah, ac, av);
 		philo = malloc(sizeof(pthread_t) * sah->nphilo);
 		if (philo == NULL)
 			return (0);

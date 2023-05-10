@@ -48,8 +48,16 @@ void	handel(t_philo *ph)
 {
 	pthread_mutex_lock(ph->right_fork);
 	printf("%ld %d has taken a fork\n", ft_get_time() - ph->sah->start, ph->id);
-	ph->sah->index = ph->id;
-	ph->sah->paus = 1;
+	while (1)
+	{
+		if (ft_get_time() - ph->sah->start > ph->sah->time_of_die)
+		{
+			ph->sah->index = ph->id;
+			ph->sah->time = ft_get_time() - ph->sah->start;
+			ph->sah->paus = 1;
+			break ;
+		}
+	}
 }
 
 int	ft_check_max(int ac, char **av)
@@ -57,9 +65,9 @@ int	ft_check_max(int ac, char **av)
 	if (ft_atoi(av[1]) > 200 || ft_atoi(av[2]) > 2147483647
 		|| ft_atoi(av[3]) > 2147483647 || ft_atoi(av[4]) > 2147483647
 		|| (ac == 6 && ft_atoi(av[5]) > 2147483647))
-		return (printf("error\n"), 1);
+		return (1);
 	else if (ft_atoi(av[1]) < 1 || ft_atoi(av[2]) < 60
 		|| ft_atoi(av[3]) < 60 || ft_atoi(av[4]) < 60)
-		return (printf("error\n"), 1);
+		return (1);
 	return (0);
 }

@@ -43,6 +43,8 @@ t_sah	*get_arg(t_sah *sah, char **av, int ac)
 
 	i = 0;
 	j = 1;
+	if (ft_check_max(ac, av) == 1)
+		return (NULL);
 	while (j < ac)
 	{
 		i = 0;

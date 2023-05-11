@@ -6,7 +6,7 @@
 /*   By: aarchtou <aarchtou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 09:44:32 by aarchtou          #+#    #+#             */
-/*   Updated: 2023/05/11 15:38:44 by aarchtou         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:47:20 by aarchtou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,17 +99,12 @@ void	ft_creat_thread(t_philo *ph, pthread_t *philo, t_sah *sah)
 	return ;
 }
 
-void	ft_free()
-{
-	system("leaks philo");
-}
-
 int	main(int ac, char **av)
 {
 	t_philo		*ph;
 	t_sah		*sah;
 	pthread_t	*philo;
-	atexit(ft_free);
+
 	if (ac >= 5 && ac <= 6)
 	{
 		sah = malloc(sizeof(t_sah));
